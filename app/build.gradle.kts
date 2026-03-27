@@ -52,6 +52,11 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     val nav_version = "2.8.5"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation("io.coil-kt.coil3:coil-compose:3.2.0")
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta08")
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

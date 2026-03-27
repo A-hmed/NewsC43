@@ -35,7 +35,6 @@ import com.route.newsc43.ui.theme.White
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navController: NavController) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)

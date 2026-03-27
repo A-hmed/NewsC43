@@ -46,4 +46,17 @@ fun AppPreview() {
     App()
 }
 
-///Row - Column - Box
+//Http Request :
+//Link: BaseUrl/Api(EndPoint)?QueryParameters
+//Body: Json(JAVA SCRIPT OBJECT NOTATION) - xml - html
+//Headers:Json
+// -Type(Get - Post - Update - Put - Patch - Delete)
+
+//Http Response:
+//Status code (Int)
+//Body: Json
+//data class Person(val name: String, val age: Int,val freinds: List<Person>? = null)
+//val test = Person("mohamed", 11)
+//val p1 = Person("ahmed", 10, listOf(test))
+////Json
+//{"String": String - num - boolean - null - json - <Json>[]}
