@@ -12,7 +12,9 @@ import com.route.newsc43.ui.screens.home.HomeScreen
 import com.route.newsc43.ui.screens.splash.SplashScreen
 import com.route.newsc43.ui.utils.HomeRoute
 import com.route.newsc43.ui.utils.SplashRoute
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

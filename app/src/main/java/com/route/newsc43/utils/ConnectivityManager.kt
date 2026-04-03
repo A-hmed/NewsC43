@@ -4,12 +4,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-class Connectivity {
-    companion object {
-      var context: Context? = null
-    }
-    fun isOnline(): Boolean {
+class ConnectivityImpl @Inject constructor(@ApplicationContext var context: Context) : Connectivity {
+    override fun isOnline(): Boolean {
         val connectivityManager =
             context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities =
