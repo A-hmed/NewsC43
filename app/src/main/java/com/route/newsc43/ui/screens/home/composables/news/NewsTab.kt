@@ -1,6 +1,5 @@
 package com.route.newsc43.ui.screens.home.composables.news
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,73 +13,44 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.route.newsc43.api.ApiManager
-import com.route.newsc43.api.model.SourceDM
-import com.route.newsc43.api.model.SourcesResponse
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.route.newsc43.ui.composables.DefaultErrorMessage
 import com.route.newsc43.ui.composables.DefaultLoadingView
 import com.route.newsc43.ui.model.Category
+import com.route.newsc43.ui.screens.home.NewsViewModel
 import com.route.newsc43.ui.theme.Black
 import com.route.newsc43.ui.theme.NewsDarkTypography
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @Composable
 fun NewsTab(category: Category) {
-    var tabs by remember { mutableStateOf<List<SourceDM>?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
 
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
+    val viewModel = viewModel<NewsViewModel>()
+    val isLoading = viewModel.isLoading.observeAsState()
+    val errorMessage = viewModel.errorMessage.observeAsState()
+    val tabs = viewModel.tabs.observeAsState()
+
+
     DisposableEffect(Unit) {
-        isLoading = true
-        ApiManager.getWebServices().getSources(category = category.title)
-            .enqueue(object : Callback<SourcesResponse> {
-                override fun onResponse(
-                    call: Call<SourcesResponse?>,
-                    response: Response<SourcesResponse?>
-                ) {
-                    isLoading = false
-                    Log.e("getSources - onResponse", "code = ${response.code()}")
-                    if (response.isSuccessful) {
-                        tabs = response.body()!!.sources
-                    } else {
-                        errorMessage = response.message()
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<SourcesResponse?>,
-                    t: Throwable
-                ) {
-                    isLoading = false
-                    Log.e("getSources - onFailure", "code = ${t.message}")
-                    errorMessage = t.message ?: "Something went please try again later"
-                }
-
-            })
-
+        viewModel.getSources(category.title)
         onDispose {}
     }
-
-
 
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        if (isLoading) {
+        if (isLoading.value == true) {
             DefaultLoadingView()
         }
-        if (!tabs.isNullOrEmpty()) {
+        if (!tabs.value.isNullOrEmpty()) {
             ScrollableTabRow(
                 selectedTabIndex = selectedTabIndex,
                 containerColor = Black,
@@ -95,7 +65,7 @@ fun NewsTab(category: Category) {
                 },
                 divider = {}
             ) {
-                for (i in 0 until (tabs?.size ?: -1)) {
+                for (i in 0 until (tabs.value?.size ?: -1)) {
                     var isSelected = selectedTabIndex == i
                     Tab(
                         selected = selectedTabIndex == i,
@@ -104,22 +74,20 @@ fun NewsTab(category: Category) {
                         }, modifier = Modifier.padding(8.dp)
                     ) {
                         Text(
-                            tabs!![i].name ?: "",
+                            tabs.value!![i].name ?: "",
                             style = if (isSelected) NewsDarkTypography.bodyMedium else NewsDarkTypography.bodySmall
                         )
                     }
                 }
             }
-            Log.e("ArticlesList", "selectedTabIndex = ${selectedTabIndex}")
-            ArticlesList(source = tabs!![selectedTabIndex].id ?: "")
+            ArticlesList(source = tabs.value!![selectedTabIndex].id ?: "")
         }
 
-        if (errorMessage?.isNotEmpty() == true) {
-            DefaultErrorMessage(errorMessage!!) {
+        if (errorMessage.value?.isNotEmpty() == true) {
+            DefaultErrorMessage(errorMessage.value!!) {
 
             }
         }
-
     }
 
 }

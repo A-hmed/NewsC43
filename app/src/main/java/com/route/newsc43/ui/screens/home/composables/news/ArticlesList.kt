@@ -1,6 +1,5 @@
 package com.route.newsc43.ui.screens.home.composables.news
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -17,86 +16,53 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.route.newsc43.R
-import com.route.newsc43.api.ApiManager
 import com.route.newsc43.api.model.ArticleDM
-import com.route.newsc43.api.model.ArticlesResponse
 import com.route.newsc43.ui.composables.DefaultErrorMessage
 import com.route.newsc43.ui.composables.DefaultLoadingView
+import com.route.newsc43.ui.screens.home.NewsViewModel
 import com.route.newsc43.ui.theme.Black
 import com.route.newsc43.ui.theme.NewsDarkTypography
 import com.route.newsc43.ui.theme.White
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 @Composable
 fun ArticlesList(source: String) {
-
-    var isLoading by remember { mutableStateOf(false) }
-
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    var articles by remember { mutableStateOf<List<ArticleDM>?>(null) }
+    val viewModel = viewModel<NewsViewModel>()
+    val isLoading = viewModel.isLoading.observeAsState()
+    val errorMessage = viewModel.errorMessage.observeAsState()
+    val articles = viewModel.articles.observeAsState()
 
     DisposableEffect(source) {
-        isLoading = true
-        ApiManager.getWebServices().getArticles(source = source)
-            .enqueue(object : Callback<ArticlesResponse> {
-                override fun onResponse(
-                    call: Call<ArticlesResponse?>,
-                    response: Response<ArticlesResponse?>
-                ) {
-                    isLoading = false
-                    Log.e("getArticles - onResponse", "code = ${response.code()}")
-                    Log.e("getArticles - onResponse", "body = ${response.body()}")
-                    if (response.isSuccessful) {
-                        articles = response.body()!!.articles
-                    } else {
-                        errorMessage = response.message()
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<ArticlesResponse?>,
-                    t: Throwable
-                ) {
-                    Log.e("getArticles - onFailure", "body = ${t}")
-                    isLoading = false
-                    errorMessage = t.message ?: "Something went wrong please try again later"
-                }
-
-            })
+        viewModel.getArticles(source)
         onDispose { }
     }
 
     LazyColumn {
-        if (isLoading) {
+        if (isLoading.value!!) {
             item {
                 DefaultLoadingView()
             }
 
         }
-        if (errorMessage?.isNotEmpty() == true) {
+        if (errorMessage.value?.isNotEmpty() == true) {
             item {
-                DefaultErrorMessage(errorMessage!!) {
+                DefaultErrorMessage(errorMessage.value!!) {
 
                 }
             }
 
         }
-        if (!articles.isNullOrEmpty()) {
-            items(articles!!) { article ->
+        if (!articles.value.isNullOrEmpty()) {
+            items(articles.value!!) { article ->
                 ArticleItem(article)
             }
         }
