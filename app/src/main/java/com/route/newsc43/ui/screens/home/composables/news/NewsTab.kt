@@ -19,7 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.route.newsc43.ui.composables.DefaultErrorMessage
 import com.route.newsc43.ui.composables.DefaultLoadingView
@@ -27,6 +29,7 @@ import com.route.newsc43.ui.model.Category
 import com.route.newsc43.ui.screens.home.NewsViewModel
 import com.route.newsc43.ui.theme.Black
 import com.route.newsc43.ui.theme.NewsDarkTypography
+import com.route.newsc43.ui.theme.White
 
 @Composable
 fun NewsTab(category: Category) {
@@ -37,7 +40,6 @@ fun NewsTab(category: Category) {
     val isLoading = viewModel.isLoading.observeAsState()
     val errorMessage = viewModel.errorMessage.observeAsState()
     val tabs = viewModel.tabs.observeAsState()
-
 
     DisposableEffect(Unit) {
         viewModel.getSources(category.title)
@@ -50,37 +52,51 @@ fun NewsTab(category: Category) {
         if (isLoading.value == true) {
             DefaultLoadingView()
         }
-        if (!tabs.value.isNullOrEmpty()) {
-            ScrollableTabRow(
-                selectedTabIndex = selectedTabIndex,
-                containerColor = Black,
-                indicator = { tabsPositions ->
-                    Box(
-                        Modifier
-                            .tabIndicatorOffset(tabsPositions[selectedTabIndex])
-                            .padding(top = 10.dp)
-                            .height(1.dp)
-                            .background(color = Color.White)
-                    )
-                },
-                divider = {}
-            ) {
-                for (i in 0 until (tabs.value?.size ?: -1)) {
-                    var isSelected = selectedTabIndex == i
-                    Tab(
-                        selected = selectedTabIndex == i,
-                        onClick = {
-                            selectedTabIndex = i
-                        }, modifier = Modifier.padding(8.dp)
-                    ) {
-                        Text(
-                            tabs.value!![i].name ?: "",
-                            style = if (isSelected) NewsDarkTypography.bodyMedium else NewsDarkTypography.bodySmall
+        if (tabs.value != null) {
+            if (tabs.value!!.isNotEmpty()) {
+                ScrollableTabRow(
+                    selectedTabIndex = selectedTabIndex,
+                    containerColor = Black,
+                    indicator = { tabsPositions ->
+                        Box(
+                            Modifier
+                                .tabIndicatorOffset(tabsPositions[selectedTabIndex])
+                                .padding(top = 10.dp)
+                                .height(1.dp)
+                                .background(color = Color.White)
                         )
+                    },
+                    divider = {}
+                ) {
+                    for (i in 0 until (tabs.value?.size ?: -1)) {
+                        var isSelected = selectedTabIndex == i
+                        Tab(
+                            selected = selectedTabIndex == i,
+                            onClick = {
+                                selectedTabIndex = i
+                            }, modifier = Modifier.padding(8.dp)
+                        ) {
+                            Text(
+                                tabs.value!![i].name ?: "",
+                                style = if (isSelected) NewsDarkTypography.bodyMedium else NewsDarkTypography.bodySmall
+                            )
+                        }
                     }
                 }
+                ArticlesList(source = tabs.value!![selectedTabIndex].id ?: "")
+            } else {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = androidx.compose.ui.Alignment.Center
+                ) {
+                    Text(
+                        text = "Something went wrong please try again later ",
+                        style = TextStyle(color = White, fontSize = 18.sp)
+                    )
+                }
             }
-            ArticlesList(source = tabs.value!![selectedTabIndex].id ?: "")
+
+
         }
 
         if (errorMessage.value?.isNotEmpty() == true) {

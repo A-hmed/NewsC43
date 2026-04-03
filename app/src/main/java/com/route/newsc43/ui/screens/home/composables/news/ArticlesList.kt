@@ -3,9 +3,11 @@ package com.route.newsc43.ui.screens.home.composables.news
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,13 +21,15 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.route.newsc43.R
-import com.route.newsc43.api.model.ArticleDM
+import com.route.newsc43.data.api.model.ArticleDM
 import com.route.newsc43.ui.composables.DefaultErrorMessage
 import com.route.newsc43.ui.composables.DefaultLoadingView
 import com.route.newsc43.ui.screens.home.NewsViewModel
@@ -37,8 +41,8 @@ import com.route.newsc43.ui.theme.White
 @Composable
 fun ArticlesList(source: String) {
     val viewModel = viewModel<NewsViewModel>()
-    val isLoading = viewModel.isLoading.observeAsState()
-    val errorMessage = viewModel.errorMessage.observeAsState()
+    val isLoading = viewModel.isLoadingArticles.observeAsState()
+    val errorMessage = viewModel.articlesErrorMessage.observeAsState()
     val articles = viewModel.articles.observeAsState()
 
     DisposableEffect(source) {
@@ -61,9 +65,24 @@ fun ArticlesList(source: String) {
             }
 
         }
-        if (!articles.value.isNullOrEmpty()) {
-            items(articles.value!!) { article ->
-                ArticleItem(article)
+        if (articles.value != null) {
+            if (articles.value!!.isNotEmpty()) {
+                items(articles.value!!) { article ->
+                    ArticleItem(article)
+                }
+            } else {
+                item {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = androidx.compose.ui.Alignment.Center
+                    ) {
+                        Text(
+                            text = "No articles in this source",
+                            style = TextStyle(color = White, fontSize = 18.sp)
+                        )
+                    }
+
+                }
             }
         }
 
