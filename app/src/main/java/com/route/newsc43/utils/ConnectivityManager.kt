@@ -7,7 +7,8 @@ import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class ConnectivityImpl @Inject constructor(@ApplicationContext var context: Context) : Connectivity {
+class ConnectivityImpl @Inject constructor(@ApplicationContext var context: Context) :
+    Connectivity {
     override fun isOnline(): Boolean {
         val connectivityManager =
             context!!.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

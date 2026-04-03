@@ -1,6 +1,5 @@
 package com.route.newsc43.ui.screens.home
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

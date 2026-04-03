@@ -1,10 +1,6 @@
 package com.route.newsc43.data.repositories.news_repository.data_sources.news_local_data_source
 
 import com.route.newsc43.data.api.model.SourceDM
-import com.route.newsc43.data.api.model.SourcesResponse
-import com.route.newsc43.data.database.MyDatabase
-import java.util.Locale
-import java.util.Locale.getDefault
 
 interface NewsLocalDataSource {
     suspend fun getSources(category: String): List<SourceDM>

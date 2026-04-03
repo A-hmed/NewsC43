@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.route.newsc43.data.api.ApiManager
 import com.route.newsc43.data.api.model.ArticleDM
 import com.route.newsc43.data.api.model.SourceDM
+import com.route.newsc43.domain.model.Source
 import com.route.newsc43.domain.usecase.GetSourcesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,11 +15,11 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class NewsViewModel @Inject constructor(val getSourcesUseCase: GetSourcesUseCase, ) : ViewModel() {
+class NewsViewModel @Inject constructor(val getSourcesUseCase: GetSourcesUseCase) : ViewModel() {
 
     //View -> ViewModel -> UseCase -> Repo -> DataSource {
 
-    var tabs: MutableLiveData<List<SourceDM>?> = MutableLiveData(null)
+    var tabs: MutableLiveData<List<Source>?> = MutableLiveData(null)
     var isLoading: MutableLiveData<Boolean> = MutableLiveData(false)
     var isLoadingArticles: MutableLiveData<Boolean> = MutableLiveData(false)
     var errorMessage: MutableLiveData<String?> = MutableLiveData(null)

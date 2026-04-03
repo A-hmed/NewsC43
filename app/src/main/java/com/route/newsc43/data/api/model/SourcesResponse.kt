@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class SourcesResponse(
 
     @field:SerializedName("sources")
-	val sources: List<SourceDM>? = null,
+    val sources: List<SourceDM>? = null,
 
     @field:SerializedName("status")
-	val status: String? = null
+    val status: String? = null
 )

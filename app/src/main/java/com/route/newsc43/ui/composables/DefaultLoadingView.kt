@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import com.route.newsc43.ui.theme.White
 
 @Composable
-fun DefaultLoadingView(){
+fun DefaultLoadingView() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator(color = White)
     }

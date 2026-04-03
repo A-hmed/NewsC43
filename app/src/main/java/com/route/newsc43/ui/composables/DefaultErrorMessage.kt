@@ -25,7 +25,7 @@ fun DefaultErrorMessage(message: String, onRetry: () -> Unit) {
         ElevatedButton(onClick = {
             onRetry()
         }) {
-            Text("Retry", )
+            Text("Retry")
         }
     }
 }
