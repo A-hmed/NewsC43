@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.route.newsc43.data.api.model.SourceDM
 import com.route.newsc43.data.database.dao.SourcesDao
 
-@Database(entities = [SourceDM::class], version = 1)
+@Database(entities = [SourceDM::class], version = 1, exportSchema = false)
 abstract class MyDatabase : RoomDatabase() {
     companion object {
         private var myDataBase: MyDatabase? = null

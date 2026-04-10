@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.play.services.location)
     val nav_version = "2.8.5"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
@@ -71,7 +72,8 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.57.1")
     ksp("com.google.dagger:hilt-android-compiler:2.57.1")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-
+    implementation("com.google.accompanist:accompanist-permissions:0.37.3")
+    implementation("com.google.maps.android:maps-compose:6.7.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

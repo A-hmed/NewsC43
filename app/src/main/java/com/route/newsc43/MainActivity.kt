@@ -9,8 +9,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.route.newsc43.ui.screens.home.HomeScreen
+import com.route.newsc43.ui.screens.maps.MapScreenWrapper
 import com.route.newsc43.ui.screens.splash.SplashScreen
 import com.route.newsc43.ui.utils.HomeRoute
+import com.route.newsc43.ui.utils.MapRoute
 import com.route.newsc43.ui.utils.SplashRoute
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,13 +31,16 @@ fun App() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = HomeRoute,
+        startDestination = MapRoute,
     ) {
         composable<HomeRoute> {
             HomeScreen(navController)
         }
         composable<SplashRoute> {
             SplashScreen(navController)
+        }
+        composable<MapRoute> {
+            MapScreenWrapper()
         }
 
     }

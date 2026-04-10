@@ -7,3 +7,6 @@ data object HomeRoute
 
 @Serializable
 data object SplashRoute
+
+@Serializable
+data object MapRoute
